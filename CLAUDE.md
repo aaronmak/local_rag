@@ -13,6 +13,7 @@ A local RAG (Retrieval-Augmented Generation) system built with Python, using Oll
 - **LLM**: Ollama (local inference)
 - **Vector Database**: ChromaDB
 - **Framework**: LangChain
+- **Document Processing**: pypdf for PDF extraction
 - **Testing**: pytest with coverage
 - **Code Quality**: Black (formatter), Ruff (linter), mypy (type checker)
 
@@ -38,7 +39,7 @@ ollama pull nomic-embed-text
 # Run example usage script
 uv run python scripts/example_usage.py
 
-# Ingest documents from a directory
+# Ingest documents from a directory (supports .txt and .pdf files)
 uv run python scripts/ingest_documents.py data/documents/
 
 # Ingest with vector store reset

@@ -6,6 +6,7 @@ A local Retrieval-Augmented Generation (RAG) system built with Ollama, ChromaDB,
 
 - **Local-first**: Runs completely on your machine with Ollama
 - **Vector Storage**: Uses ChromaDB for efficient document retrieval
+- **Multiple Document Formats**: Supports PDF and text files
 - **Flexible**: Built on LangChain for easy customization
 - **Simple API**: Easy-to-use Python interface
 - **Streaming Support**: Stream responses for better UX
@@ -77,11 +78,13 @@ uv run python scripts/example_usage.py
 
 ### Ingest Documents
 
-Place your `.txt` files in the `data/documents/` directory, then run:
+Place your documents (`.txt` or `.pdf` files) in the `data/documents/` directory, then run:
 
 ```bash
 uv run python scripts/ingest_documents.py data/documents/
 ```
+
+The script automatically detects and processes both text and PDF files, extracting text content and storing it with metadata including file type, source path, and page count (for PDFs).
 
 Options:
 
