@@ -13,7 +13,7 @@ A local RAG (Retrieval-Augmented Generation) system built with Python, using Oll
 - **LLM**: Ollama (local inference)
 - **Vector Database**: ChromaDB
 - **Framework**: LangChain
-- **Document Processing**: pypdf for PDF extraction
+- **Document Processing**: pdfplumber for layout-aware PDF extraction, pypdf for basic extraction
 - **Testing**: pytest with coverage
 - **Code Quality**: Black (formatter), Ruff (linter), mypy (type checker)
 
@@ -40,10 +40,14 @@ ollama pull nomic-embed-text
 uv run python scripts/example_usage.py
 
 # Ingest documents from a directory (supports .txt and .pdf files)
+# By default, PDFs are processed with layout preservation (bounding boxes, position, fonts)
 uv run python scripts/ingest_documents.py data/documents/
 
 # Ingest with vector store reset
 uv run python scripts/ingest_documents.py data/documents/ --reset
+
+# Ingest without layout preservation (faster, but loses spatial context)
+uv run python scripts/ingest_documents.py data/documents/ --no-layout
 ```
 
 ### Development Commands
@@ -149,7 +153,8 @@ src/local_rag/          # Main package
 ├── embeddings.py       # Ollama embeddings wrapper
 ├── vectorstore.py      # ChromaDB integration
 ├── generator.py        # Ollama LLM generation
-└── pipeline.py         # Main RAG orchestrator
+├── pipeline.py         # Main RAG orchestrator
+└── pdf_processor.py    # PDF layout-aware processing
 
 tests/                  # Test suite
 ├── __init__.py
@@ -196,3 +201,26 @@ OLLAMA_EMBEDDING_MODEL=nomic-embed-text
 - Vector data persists in `./chroma_db/` (configurable)
 - Use `pipeline.reset()` to clear all data
 - Each collection is independent (useful for multiple projects)
+
+### PDF Layout Processing
+
+The `pdf_processor.py` module provides layout-aware PDF extraction:
+
+**Key Features:**
+- Extracts bounding boxes (x0, y0, x1, y1) for every text element
+- Preserves font information (size, bold, italic styling)
+- Determines position context (top/middle/bottom, left/center/right)
+- Automatically detects likely headings based on font size and styling
+- Groups words into logical text lines
+
+**How It Helps:**
+The vector database receives text annotated with layout metadata like:
+```
+[position:top-left | type:heading | size:16.0 | style:bold | bbox:[72,100,300,120]]
+Document Title
+
+[position:middle-left | size:12.0 | bbox:[72,150,500,165]]
+This is the main body text...
+```
+
+This enables the LLM to understand that text in certain positions (headers, footers, sidebars) may have different semantic importance than body text, improving retrieval quality for layout-heavy documents like forms, invoices, or multi-column articles.

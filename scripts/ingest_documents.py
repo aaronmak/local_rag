@@ -5,36 +5,22 @@ import argparse
 from pathlib import Path
 from typing import List
 
-from pypdf import PdfReader
-
 from local_rag import RAGPipeline
+from local_rag.pdf_processor import PDFLayoutProcessor
 
 
-def load_pdf_file(file_path: Path) -> tuple[str, dict]:
-    """Load a PDF file and extract text.
+def load_pdf_file(file_path: Path, preserve_layout: bool = True) -> tuple[str, dict]:
+    """Load a PDF file and extract text with layout awareness.
 
     Args:
         file_path: Path to PDF file
+        preserve_layout: Whether to preserve layout information (bounding boxes, positions, etc.)
 
     Returns:
         Tuple of (content, metadata)
     """
-    reader = PdfReader(file_path)
-    text_parts = []
-
-    for page_num, page in enumerate(reader.pages, start=1):
-        text = page.extract_text()
-        if text.strip():
-            text_parts.append(text)
-
-    content = "\n\n".join(text_parts)
-    metadata = {
-        "source": str(file_path),
-        "filename": file_path.name,
-        "num_pages": len(reader.pages),
-        "file_type": "pdf",
-    }
-
+    processor = PDFLayoutProcessor(preserve_layout=preserve_layout)
+    content, metadata = processor.process_pdf(file_path)
     return content, metadata
 
 
@@ -57,11 +43,12 @@ def load_text_file(file_path: Path) -> tuple[str, dict]:
     return content, metadata
 
 
-def load_documents(directory: Path) -> List[tuple[str, dict]]:
+def load_documents(directory: Path, preserve_layout: bool = True) -> List[tuple[str, dict]]:
     """Load all supported documents from a directory.
 
     Args:
         directory: Directory containing documents
+        preserve_layout: Whether to preserve layout information for PDFs
 
     Returns:
         List of tuples (content, metadata)
@@ -75,7 +62,7 @@ def load_documents(directory: Path) -> List[tuple[str, dict]]:
 
         try:
             if file_path.suffix.lower() == ".pdf":
-                content, metadata = load_pdf_file(file_path)
+                content, metadata = load_pdf_file(file_path, preserve_layout=preserve_layout)
             else:
                 content, metadata = load_text_file(file_path)
 
@@ -100,6 +87,11 @@ def main():
         action="store_true",
         help="Reset the vector store before ingesting",
     )
+    parser.add_argument(
+        "--no-layout",
+        action="store_true",
+        help="Disable layout preservation for PDFs (faster but loses spatial context)",
+    )
 
     args = parser.parse_args()
 
@@ -117,8 +109,13 @@ def main():
         rag.reset()
 
     # Load documents
-    print(f"\nLoading documents from {args.directory}...")
-    docs_with_metadata = load_documents(args.directory)
+    preserve_layout = not args.no_layout
+    if preserve_layout:
+        print(f"\nLoading documents from {args.directory} (with layout preservation)...")
+    else:
+        print(f"\nLoading documents from {args.directory} (basic mode)...")
+
+    docs_with_metadata = load_documents(args.directory, preserve_layout=preserve_layout)
 
     if not docs_with_metadata:
         print("No documents found!")

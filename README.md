@@ -84,11 +84,19 @@ Place your documents (`.txt` or `.pdf` files) in the `data/documents/` directory
 uv run python scripts/ingest_documents.py data/documents/
 ```
 
-The script automatically detects and processes both text and PDF files, extracting text content and storing it with metadata including file type, source path, and page count (for PDFs).
+**PDF Layout Awareness**: By default, PDFs are processed with full layout preservation, extracting:
+- Bounding box coordinates for each text element
+- Position context (top/middle/bottom, left/center/right)
+- Font information (size, bold, italic)
+- Automatic heading detection
+- Spatial relationships between text elements
+
+This makes the vector database understand the **significance of text placement**, enabling better retrieval for documents where layout matters (forms, tables, multi-column layouts, etc.).
 
 Options:
 
 - `--reset`: Clear the vector store before ingesting
+- `--no-layout`: Disable layout preservation (faster processing, but loses spatial context)
 
 ## Development
 
@@ -136,17 +144,18 @@ uv run mypy src/
 
 Configuration can be set via environment variables or a `.env` file:
 
-| Variable                   | Default                  | Description                     |
-| -------------------------- | ------------------------ | ------------------------------- |
-| `OLLAMA_BASE_URL`          | `http://localhost:11434` | Ollama API URL                  |
-| `OLLAMA_MODEL`             | `llama2`                 | Model for text generation       |
-| `OLLAMA_EMBEDDING_MODEL`   | `nomic-embed-text`       | Model for embeddings            |
-| `CHROMA_PERSIST_DIRECTORY` | `./chroma_db`            | ChromaDB storage path           |
-| `CHROMA_COLLECTION_NAME`   | `documents`              | Collection name                 |
-| `CHUNK_SIZE`               | `1000`                   | Text chunk size                 |
-| `CHUNK_OVERLAP`            | `200`                    | Chunk overlap size              |
-| `TOP_K`                    | `4`                      | Number of documents to retrieve |
-| `TEMPERATURE`              | `0.7`                    | Generation temperature          |
+| Variable                   | Default                  | Description                                  |
+| -------------------------- | ------------------------ | -------------------------------------------- |
+| `OLLAMA_BASE_URL`          | `http://localhost:11434` | Ollama API URL                               |
+| `OLLAMA_MODEL`             | `llama2`                 | Model for text generation                    |
+| `OLLAMA_EMBEDDING_MODEL`   | `nomic-embed-text`       | Model for embeddings                         |
+| `CHROMA_PERSIST_DIRECTORY` | `./chroma_db`            | ChromaDB storage path                        |
+| `CHROMA_COLLECTION_NAME`   | `documents`              | Collection name                              |
+| `CHUNK_SIZE`               | `1000`                   | Text chunk size                              |
+| `CHUNK_OVERLAP`            | `200`                    | Chunk overlap size                           |
+| `TOP_K`                    | `4`                      | Number of documents to retrieve              |
+| `TEMPERATURE`              | `0.7`                    | Generation temperature                       |
+| `PDF_PRESERVE_LAYOUT`      | `true`                   | Preserve layout/bounding boxes from PDFs     |
 
 ## Project Structure
 

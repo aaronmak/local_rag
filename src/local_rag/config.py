@@ -41,6 +41,11 @@ class Settings(BaseSettings):
     temperature: float = Field(default=0.7, description="Temperature for text generation")
     max_tokens: Optional[int] = Field(default=None, description="Maximum tokens to generate")
 
+    # PDF processing settings
+    pdf_preserve_layout: bool = Field(
+        default=True, description="Preserve layout and bounding box information from PDFs"
+    )
+
 
 def get_settings() -> Settings:
     """Get application settings."""
