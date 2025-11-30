@@ -69,3 +69,5 @@ config/local.yaml
 # Logs
 *.log
 logs/
+
+test_chroma_db/
