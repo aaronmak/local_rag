@@ -2,6 +2,8 @@
 
 A local Retrieval-Augmented Generation (RAG) system built with Ollama, ChromaDB, and LangChain. This system allows you to build a question-answering system over your own documents, running entirely on your local machine.
 
+> **New here?** Check out [GETTING_STARTED.md](GETTING_STARTED.md) for a simple, non-technical guide to get up and running in 3 steps.
+
 ## Features
 
 - **Local-first**: Runs completely on your machine with Ollama
