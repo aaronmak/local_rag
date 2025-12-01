@@ -196,6 +196,8 @@ OLLAMA_MODEL=mistral
 OLLAMA_EMBEDDING_MODEL=nomic-embed-text
 ```
 
+**GPU Acceleration on macOS**: Ollama automatically uses Metal GPU acceleration on Apple Silicon (M1/M2/M3/M4) chips. The models will leverage the Neural Engine and GPU cores for optimal performance without any additional configuration. You can verify GPU usage by monitoring activity in Activity Monitor (look for high GPU utilization when running queries).
+
 ### ChromaDB Persistence
 
 - Vector data persists in `./chroma_db/` (configurable)

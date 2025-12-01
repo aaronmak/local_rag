@@ -27,6 +27,8 @@ A local Retrieval-Augmented Generation (RAG) system built with Ollama, ChromaDB,
    ollama pull nomic-embed-text
    ```
 
+**macOS M-series GPU Acceleration**: Ollama automatically uses Metal GPU acceleration on Apple Silicon (M1/M2/M3/M4) chips. No additional configuration needed - the models will run on your GPU by default for optimal performance.
+
 ## Installation
 
 1. Clone the repository:
