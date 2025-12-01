@@ -2,7 +2,7 @@
 
 from typing import List, Optional
 
-from langchain_community.llms import Ollama
+from langchain_ollama import OllamaLLM
 from langchain_core.documents import Document
 from langchain_core.prompts import PromptTemplate
 
@@ -31,7 +31,7 @@ class Generator:
             prompt_template: Optional custom prompt template
         """
         self.settings = settings
-        self.llm = Ollama(
+        self.llm = OllamaLLM(
             base_url=settings.ollama_base_url,
             model=settings.ollama_model,
             temperature=settings.temperature,
