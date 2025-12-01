@@ -131,7 +131,7 @@ def main():
 
     # Print stats
     stats = rag.get_stats()
-    print(f"\nIngestion complete!")
+    print("\nIngestion complete!")
     print(f"  Total documents in system: {stats['num_documents']}")
     print(f"  Documents added: {len(ids)}")
 

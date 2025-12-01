@@ -36,8 +36,8 @@ ollama pull nomic-embed-text
 ### Running the Application
 
 ```bash
-# Run example usage script
-uv run python scripts/example_usage.py
+# Start interactive chat interface
+uv run python scripts/chat.py
 
 # Ingest documents from a directory (supports .txt and .pdf files)
 # By default, PDFs are processed with layout preservation (bounding boxes, position, fonts)
@@ -161,7 +161,7 @@ tests/                  # Test suite
 └── test_pipeline.py    # Pipeline integration tests
 
 scripts/                # Utility scripts
-├── example_usage.py    # Basic usage example
+├── chat.py             # Interactive terminal chat interface
 └── ingest_documents.py # Document ingestion tool
 
 data/documents/         # Place documents to ingest here

@@ -50,33 +50,7 @@ A local Retrieval-Augmented Generation (RAG) system built with Ollama, ChromaDB,
 
 ## Quick Start
 
-### Basic Usage
-
-```python
-from local_rag import RAGPipeline
-
-# Initialize the pipeline
-rag = RAGPipeline()
-
-# Add documents
-documents = [
-    "Python is a high-level programming language.",
-    "Machine learning is a subset of AI.",
-]
-rag.add_documents(documents)
-
-# Query the system
-result = rag.query("What is Python?")
-print(result["answer"])
-```
-
-### Run the Example Script
-
-```bash
-uv run python scripts/example_usage.py
-```
-
-### Ingest Documents
+### 1. Ingest Documents
 
 Place your documents (`.txt` or `.pdf` files) in the `data/documents/` directory, then run:
 
@@ -97,6 +71,47 @@ Options:
 
 - `--reset`: Clear the vector store before ingesting
 - `--no-layout`: Disable layout preservation (faster processing, but loses spatial context)
+
+### 2. Start Chatting
+
+Launch the interactive chat interface:
+
+```bash
+uv run python scripts/chat.py
+```
+
+This will start an interactive terminal session where you can:
+- Ask questions about your documents
+- Get streaming responses from the LLM
+- View system statistics with `/stats`
+- Get help with `/help`
+- Exit with `/quit`
+
+### Programmatic Usage
+
+You can also use the RAG system programmatically in your own Python code:
+
+```python
+from local_rag import RAGPipeline
+
+# Initialize the pipeline
+rag = RAGPipeline()
+
+# Add documents
+documents = [
+    "Python is a high-level programming language.",
+    "Machine learning is a subset of AI.",
+]
+rag.add_documents(documents)
+
+# Query the system
+result = rag.query("What is Python?")
+print(result["answer"])
+
+# Or stream the response
+for chunk in rag.query_stream("What is Python?"):
+    print(chunk, end="", flush=True)
+```
 
 ## Development
 
