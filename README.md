@@ -23,7 +23,7 @@ A local Retrieval-Augmented Generation (RAG) system built with Ollama, ChromaDB,
 2. Pull the required models:
 
    ```bash
-   ollama pull llama2
+   ollama pull gpt-oss:20b
    ollama pull nomic-embed-text
    ```
 
@@ -162,7 +162,7 @@ Configuration can be set via environment variables or a `.env` file:
 | Variable                   | Default                  | Description                                  |
 | -------------------------- | ------------------------ | -------------------------------------------- |
 | `OLLAMA_BASE_URL`          | `http://localhost:11434` | Ollama API URL                               |
-| `OLLAMA_MODEL`             | `llama2`                 | Model for text generation                    |
+| `OLLAMA_MODEL`             | `gpt-oss:20b`            | Model for text generation                    |
 | `OLLAMA_EMBEDDING_MODEL`   | `nomic-embed-text`       | Model for embeddings                         |
 | `CHROMA_PERSIST_DIRECTORY` | `./chroma_db`            | ChromaDB storage path                        |
 | `CHROMA_COLLECTION_NAME`   | `documents`              | Collection name                              |

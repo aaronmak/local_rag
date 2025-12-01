@@ -60,7 +60,7 @@ def main():
         print("\nMake sure:")
         print("  1. Ollama is running (ollama serve)")
         print("  2. Required models are installed:")
-        print("     - ollama pull llama2")
+        print("     - ollama pull gpt-oss:20b")
         print("     - ollama pull nomic-embed-text")
         sys.exit(1)
 

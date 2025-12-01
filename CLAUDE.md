@@ -29,7 +29,7 @@ uv sync
 uv sync --extra dev
 
 # Install Ollama models (external requirement)
-ollama pull llama2
+ollama pull gpt-oss:20b
 ollama pull nomic-embed-text
 ```
 
@@ -131,7 +131,7 @@ The project uses a layered configuration approach:
 - Override programmatically via `Settings` object
 
 Key settings:
-- `OLLAMA_MODEL`: LLM for generation (default: llama2)
+- `OLLAMA_MODEL`: LLM for generation (default: gpt-oss:20b)
 - `OLLAMA_EMBEDDING_MODEL`: Model for embeddings (default: nomic-embed-text)
 - `CHUNK_SIZE`: Text chunk size (default: 1000)
 - `TOP_K`: Number of documents to retrieve (default: 4)
