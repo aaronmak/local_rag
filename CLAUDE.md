@@ -29,7 +29,7 @@ uv sync
 uv sync --extra dev
 
 # Install Ollama models (external requirement)
-ollama pull gpt-oss:20b
+ollama pull llama3:8b
 ollama pull nomic-embed-text
 ```
 
@@ -125,13 +125,15 @@ Response to User
 ### Configuration System
 
 The project uses a layered configuration approach:
+
 - Default values in `config.py`
 - Override via `.env` file (copy from `.env.example`)
 - Override via environment variables
 - Override programmatically via `Settings` object
 
 Key settings:
-- `OLLAMA_MODEL`: LLM for generation (default: gpt-oss:20b)
+
+- `OLLAMA_MODEL`: LLM for generation (default: llama3:8b)
 - `OLLAMA_EMBEDDING_MODEL`: Model for embeddings (default: nomic-embed-text)
 - `CHUNK_SIZE`: Text chunk size (default: 1000)
 - `TOP_K`: Number of documents to retrieve (default: 4)
@@ -139,6 +141,7 @@ Key settings:
 ### Testing Strategy
 
 Tests are located in `tests/` and use pytest:
+
 - Fixtures for test settings and pipeline initialization
 - Cleanup after each test to avoid state pollution
 - Test ChromaDB uses separate collection (`test_documents`)
@@ -172,6 +175,7 @@ data/documents/         # Place documents to ingest here
 ### Adding New Features
 
 When extending the system:
+
 - Keep components modular and single-purpose
 - Update configuration in `config.py` if new settings are needed
 - Add tests in `tests/` for new functionality
@@ -181,16 +185,19 @@ When extending the system:
 ### Working with Ollama
 
 Ensure Ollama is running locally:
+
 ```bash
 ollama serve  # If not running as service
 ```
 
 List available models:
+
 ```bash
 ollama list
 ```
 
 Change models by updating `.env`:
+
 ```env
 OLLAMA_MODEL=mistral
 OLLAMA_EMBEDDING_MODEL=nomic-embed-text
@@ -209,6 +216,7 @@ OLLAMA_EMBEDDING_MODEL=nomic-embed-text
 The `pdf_processor.py` module provides layout-aware PDF extraction:
 
 **Key Features:**
+
 - Extracts bounding boxes (x0, y0, x1, y1) for every text element
 - Preserves font information (size, bold, italic styling)
 - Determines position context (top/middle/bottom, left/center/right)
@@ -217,6 +225,7 @@ The `pdf_processor.py` module provides layout-aware PDF extraction:
 
 **How It Helps:**
 The vector database receives text annotated with layout metadata like:
+
 ```
 [position:top-left | type:heading | size:16.0 | style:bold | bbox:[72,100,300,120]]
 Document Title

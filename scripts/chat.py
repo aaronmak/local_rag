@@ -2,7 +2,6 @@
 """Interactive terminal chat interface for the RAG system."""
 
 import sys
-from pathlib import Path
 
 from local_rag import RAGPipeline
 
@@ -60,7 +59,7 @@ def main():
         print("\nMake sure:")
         print("  1. Ollama is running (ollama serve)")
         print("  2. Required models are installed:")
-        print("     - ollama pull gpt-oss:20b")
+        print("     - ollama pull llama3:8b")
         print("     - ollama pull nomic-embed-text")
         sys.exit(1)
 

@@ -19,7 +19,7 @@ class Settings(BaseSettings):
 
     # Ollama settings
     ollama_base_url: str = Field(default="http://localhost:11434", description="Ollama API base URL")
-    ollama_model: str = Field(default="gpt-oss:20b", description="Ollama model to use for generation")
+    ollama_model: str = Field(default="llama3:8b", description="Ollama model to use for generation")
     ollama_embedding_model: str = Field(
         default="nomic-embed-text", description="Ollama model to use for embeddings"
     )

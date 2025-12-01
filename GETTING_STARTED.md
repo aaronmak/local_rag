@@ -22,7 +22,7 @@ A simple guide to start chatting with your documents in 3 easy steps.
 Open Terminal (find it in Applications → Utilities) and run these two commands:
 
 ```bash
-ollama pull gpt-oss:20b
+ollama pull llama3:8b
 ollama pull nomic-embed-text
 ```
 
