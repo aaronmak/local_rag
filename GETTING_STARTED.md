@@ -61,7 +61,11 @@ This installs all the required software packages.
 
 ### Add your documents
 
-1. Copy your PDF or text files into the `data/documents/` folder
+1. Copy your documents into the `data/documents/` folder. Supported formats:
+   - PDF files (.pdf)
+   - Word documents (.docx)
+   - PowerPoint presentations (.pptx)
+   - Text files (.txt)
 2. In Terminal, run this command to process them:
 
 ```bash
@@ -140,7 +144,7 @@ Make sure Ollama is running (look for the llama icon in your menu bar). If not:
 
 You need to add documents first:
 
-1. Put PDF or text files in `data/documents/`
+1. Put documents (PDF, Word, PowerPoint, or text files) in `data/documents/`
 2. Run: `uv run python scripts/ingest_documents.py data/documents/`
 3. Then start the chat again
 

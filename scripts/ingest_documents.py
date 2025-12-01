@@ -5,6 +5,9 @@ import argparse
 from pathlib import Path
 from typing import List
 
+from docx import Document as DocxDocument
+from pptx import Presentation
+
 from local_rag import RAGPipeline
 from local_rag.pdf_processor import PDFLayoutProcessor
 
@@ -43,6 +46,83 @@ def load_text_file(file_path: Path) -> tuple[str, dict]:
     return content, metadata
 
 
+def load_docx_file(file_path: Path) -> tuple[str, dict]:
+    """Load a Word document (.docx) file.
+
+    Args:
+        file_path: Path to Word document
+
+    Returns:
+        Tuple of (content, metadata)
+    """
+    doc = DocxDocument(file_path)
+
+    # Extract text from paragraphs
+    paragraphs = [para.text for para in doc.paragraphs if para.text.strip()]
+
+    # Extract text from tables
+    table_texts = []
+    for table in doc.tables:
+        for row in table.rows:
+            row_text = " | ".join(cell.text.strip() for cell in row.cells)
+            if row_text.strip():
+                table_texts.append(row_text)
+
+    # Combine all content
+    content_parts = paragraphs
+    if table_texts:
+        content_parts.append("\n--- Tables ---\n")
+        content_parts.extend(table_texts)
+
+    content = "\n\n".join(content_parts)
+
+    metadata = {
+        "source": str(file_path),
+        "filename": file_path.name,
+        "file_type": "docx",
+        "num_paragraphs": len(paragraphs),
+        "num_tables": len(doc.tables),
+    }
+
+    return content, metadata
+
+
+def load_pptx_file(file_path: Path) -> tuple[str, dict]:
+    """Load a PowerPoint (.pptx) file.
+
+    Args:
+        file_path: Path to PowerPoint file
+
+    Returns:
+        Tuple of (content, metadata)
+    """
+    prs = Presentation(file_path)
+
+    slide_contents = []
+    for slide_num, slide in enumerate(prs.slides, start=1):
+        slide_texts = []
+
+        # Extract text from all shapes
+        for shape in slide.shapes:
+            if hasattr(shape, "text") and shape.text.strip():
+                slide_texts.append(shape.text.strip())
+
+        if slide_texts:
+            slide_content = f"--- Slide {slide_num} ---\n" + "\n\n".join(slide_texts)
+            slide_contents.append(slide_content)
+
+    content = "\n\n".join(slide_contents)
+
+    metadata = {
+        "source": str(file_path),
+        "filename": file_path.name,
+        "file_type": "pptx",
+        "num_slides": len(prs.slides),
+    }
+
+    return content, metadata
+
+
 def load_documents(directory: Path, preserve_layout: bool = True) -> List[tuple[str, dict]]:
     """Load all supported documents from a directory.
 
@@ -54,7 +134,7 @@ def load_documents(directory: Path, preserve_layout: bool = True) -> List[tuple[
         List of tuples (content, metadata)
     """
     documents = []
-    supported_extensions = {".txt", ".pdf"}
+    supported_extensions = {".txt", ".pdf", ".docx", ".pptx"}
 
     for file_path in directory.rglob("*"):
         if file_path.suffix.lower() not in supported_extensions:
@@ -63,6 +143,10 @@ def load_documents(directory: Path, preserve_layout: bool = True) -> List[tuple[
         try:
             if file_path.suffix.lower() == ".pdf":
                 content, metadata = load_pdf_file(file_path, preserve_layout=preserve_layout)
+            elif file_path.suffix.lower() == ".docx":
+                content, metadata = load_docx_file(file_path)
+            elif file_path.suffix.lower() == ".pptx":
+                content, metadata = load_pptx_file(file_path)
             else:
                 content, metadata = load_text_file(file_path)
 

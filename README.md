@@ -8,7 +8,7 @@ A local Retrieval-Augmented Generation (RAG) system built with Ollama, ChromaDB,
 
 - **Local-first**: Runs completely on your machine with Ollama
 - **Vector Storage**: Uses ChromaDB for efficient document retrieval
-- **Multiple Document Formats**: Supports PDF and text files
+- **Multiple Document Formats**: Supports PDF, Word (.docx), PowerPoint (.pptx), and text files
 - **Flexible**: Built on LangChain for easy customization
 - **Simple API**: Easy-to-use Python interface
 - **Streaming Support**: Stream responses for better UX
@@ -56,7 +56,7 @@ A local Retrieval-Augmented Generation (RAG) system built with Ollama, ChromaDB,
 
 ### 1. Ingest Documents
 
-Place your documents (`.txt` or `.pdf` files) in the `data/documents/` directory, then run:
+Place your documents (`.txt`, `.pdf`, `.docx`, or `.pptx` files) in the `data/documents/` directory, then run:
 
 ```bash
 uv run python scripts/ingest_documents.py data/documents/
